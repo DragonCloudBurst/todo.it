@@ -4,6 +4,9 @@ app = typer.Typer()
 # for whatever reason the tasks list is not being saved to and read from T-T
 tasks = []
 
+# this comment made from WSL
+# testing to ensure that pushing works
+
 @app.command()
 def menu():
     task_file = open("data.txt", "a")
