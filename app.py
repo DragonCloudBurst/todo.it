@@ -1,10 +1,7 @@
 import typer
+import random
 
 app = typer.Typer()
-# for whatever reason the tasks list is not being saved to and read from T-T
-
-# this comment made from WSL
-# testing to ensure that pushing works
 
 @app.command()
 def load():
@@ -19,6 +16,7 @@ def wipe():
     if choice == "y" or choice == "Y":
         with open("data.txt", "w") as save_data:
             save_data.write("")
+            print("Sava data deleted.")
     else:
         print("Command cancelled.")
 
@@ -29,13 +27,34 @@ def menu():
 
     with open ("data.txt", "r") as data:
         for line in data:
-            print(line)
+            print(f"{line}")
 
 @app.command()
 def write(task: str):
+    task_id = random.randint(0, 999)
     task_file = open ("data.txt", "a")
-    task_file.write(f"- {task}")
+    task_file.write(f"(id {task_id}): {task}\n")
     task_file.close()
+
+@app.command()
+def delete(task_id: int):
+    data = open("data.txt", "r")
+    read_data = data.readlines()
+    
+    # here the program will delete only one line based on the task id you gave it
+
+    #if task_id in read_data:
+
+@app.command()
+def backup():
+    backup = open("backup.txt", "w")
+    backup.write("")
+    backup.close()
+    backup = open("backup.txt", "a")
+    with open ("data.txt", "r") as save_data:
+        for line in save_data:
+            backup.write(line)
+    
 
 if __name__ == "__main__":
     global tasks
