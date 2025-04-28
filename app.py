@@ -23,11 +23,15 @@ def wipe():
 @app.command()
 def menu():
     task_file = open("data.txt", "r")
-    print(f"hello! here are your current tasks.")
+    print("  ┌───────┐")
+    print(" ─┘       └─────────────────────────────────")
+    print(f"  > hello! here are your current tasks.")
+
+    print("")
 
     with open ("data.txt", "r") as data:
         for line in data:
-            print(f"{line}")
+            print(f"  {line}")
 
 @app.command()
 def write(task: str):
@@ -40,11 +44,15 @@ def write(task: str):
 def delete(task_id: int):
     data = open("data.txt", "r")
     read_data = data.readlines()
-    
+    data.close()
+
+    data_write = open("data.txt", "w")
     # here the program will delete only one line based on the task id you gave it
-
-    #if task_id in read_data:
-
+    for number, line in enumerate(read_data):
+        if str(task_id) not in line:
+            data_write.write(line)
+    data_write.close()
+        
 @app.command()
 def backup():
     backup = open("backup.txt", "w")
