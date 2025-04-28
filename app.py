@@ -4,12 +4,6 @@ import random
 app = typer.Typer()
 
 @app.command()
-def load():
-    with open("data.txt", "r") as save_data:
-        for line in save_data.readlines():
-            tasks.append(line)
-
-@app.command()
 def wipe():
     print("Proceeding with this action will delete all of your save data.")
     choice = input("Are you sure you want to proceed? (y/n)")
@@ -65,6 +59,6 @@ def backup():
     
 
 if __name__ == "__main__":
-    global tasks
+
     app()
     
