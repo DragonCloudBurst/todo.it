@@ -19,20 +19,31 @@ def menu():
     task_file = open("data.txt", "r")
     print("  ┌───────┐")
     print(" ─┘       └─────────────────────────────────")
-    print(f"  > hello! here are your current tasks.")
-
+    print("  > hello! here are your current tasks.")
     print("")
 
     with open ("data.txt", "r") as data:
         for line in data:
             print(f"  {line}")
 
+# i have just realized that this will currently delete a task with the same string in it
+# for example delete 1 will also delete a task numbered 11
 @app.command()
 def write(task: str):
     task_id = random.randint(0, 999)
+
+    task_file = open ("data.txt", "r")
+    task_file_read = task_file.readlines()
+    task_file.close()
+
+    if str(task_id) in task_file_read:
+        task_id += 1
+
     task_file = open ("data.txt", "a")
     task_file.write(f"(id {task_id}): {task}\n")
     task_file.close()
+
+    print("Task logged.")
 
 @app.command()
 def delete(task_id: int):
@@ -43,9 +54,10 @@ def delete(task_id: int):
     data_write = open("data.txt", "w")
     # here the program will delete only one line based on the task id you gave it
     for number, line in enumerate(read_data):
-        if str(task_id) not in line:
+        if f"(id {task_id})" not in line:
             data_write.write(line)
     data_write.close()
+
         
 @app.command()
 def backup():
@@ -56,9 +68,9 @@ def backup():
     with open ("data.txt", "r") as save_data:
         for line in save_data:
             backup.write(line)
+
+    print("Data has been backed up.")
     
-
 if __name__ == "__main__":
-
     app()
     
