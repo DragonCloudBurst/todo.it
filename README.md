@@ -11,5 +11,4 @@ todo cli app in python with typer.
 
 #### TODO
 - color text with rich library
-- ensure that duplicate task ids cannot be created
 - publish package (scary)
