@@ -3,6 +3,8 @@ import random
 
 app = typer.Typer()
 
+# wipe all saved tasks from data.txt
+# backup will not be deleted
 @app.command()
 def wipe():
     print("Proceeding with this action will delete all of your save data.")
@@ -14,6 +16,7 @@ def wipe():
     else:
         print("Command cancelled.")
 
+# open the main menu to display all tasks
 @app.command()
 def menu():
     task_file = open("data.txt", "r")
@@ -26,8 +29,6 @@ def menu():
         for line in data:
             print(f"  {line}")
 
-# i have just realized that this will currently delete a task with the same string in it
-# for example delete 1 will also delete a task numbered 11
 @app.command()
 def write(task: str):
     task_id = random.randint(0, 999)
@@ -36,9 +37,11 @@ def write(task: str):
     task_file_read = task_file.readlines()
     task_file.close()
 
+    # ensures duplicate task ids cannot be added to the list
     if str(task_id) in task_file_read:
         task_id += 1
 
+    # write the specified task to the list along with a random number id
     task_file = open ("data.txt", "a")
     task_file.write(f"(id {task_id}): {task}\n")
     task_file.close()
@@ -58,7 +61,8 @@ def delete(task_id: int):
             data_write.write(line)
     data_write.close()
 
-        
+# save a backup copy of the current task data
+# erases the current backup and creates a new one
 @app.command()
 def backup():
     backup = open("backup.txt", "w")
