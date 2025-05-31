@@ -9,10 +9,10 @@ app = typer.Typer()
 def wipe():
     print("Proceeding with this action will delete all of your save data.")
     choice = input("Are you sure you want to proceed? (y/n)")
-    if choice == "y" or choice == "Y":
+    if choice == "y" or choice == "Y" or choice == "yes":
         with open("data.txt", "w") as save_data:
             save_data.write("")
-            print("Sava data deleted.")
+            print("Save data deleted.")
     else:
         print("Command cancelled.")
 
@@ -28,6 +28,14 @@ def menu():
     with open ("data.txt", "r") as data:
         for line in data:
             print(f"  {line}")
+
+# display all completed tasks
+@app.command()
+def log():
+    completed_file = open("completed.txt", "r")
+    print("Here are your completed tasks:")
+    for line in completed_file:
+        print(line)
 
 @app.command()
 def write(task: str):
@@ -48,18 +56,48 @@ def write(task: str):
 
     print("Task logged.")
 
+# use this to wipe a task from the list
+# without marking it as complete
 @app.command()
 def delete(task_id: int):
     data = open("data.txt", "r")
     read_data = data.readlines()
     data.close()
+    
+    task_text = ""
+        
+    for line in read_data:
+        if f"(id {task_id})" in line:
+            task_text = line
+
+    data_write = open("data.txt", "w")
+    # here the program will delete only one line based on the task id you gave it
+    data_write.write(task_text)
+    data_write.close()
+
+    print("Task deleted.")
+
+# use this to mark a task as complete
+# and save its data to completed_tasks
+@app.command()
+def complete(task_id: int):
+    data = open("data.txt", "r")
+    read_data = data.readlines()
+    data.close()
+
+    tasks_complete = open("completed.txt", "a")
 
     data_write = open("data.txt", "w")
     # here the program will delete only one line based on the task id you gave it
     for number, line in enumerate(read_data):
         if f"(id {task_id})" not in line:
             data_write.write(line)
+        if f"(id {task_id})" in line:
+            tasks_complete.write(line)
     data_write.close()
+    tasks_complete.close()
+   
+    print("Task completed.")
 
 # save a backup copy of the current task data
 # erases the current backup and creates a new one
